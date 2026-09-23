@@ -1,0 +1,592 @@
+{
+  "corpus": 49268,
+  "top_k": 5,
+  "search": {
+    "cases": [
+      {
+        "id": "ing-01",
+        "kind": "ingredients",
+        "query": "chicken tomato onion",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Hot Taco Rice"
+      },
+      {
+        "id": "ing-02",
+        "kind": "ingredients",
+        "query": "shrimp garlic lemon",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Shrimp Scampi"
+      },
+      {
+        "id": "ing-03",
+        "kind": "ingredients",
+        "query": "beef potato carrot",
+        "returned": 5,
+        "precision_at_k": 0.6,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Easy Soup"
+      },
+      {
+        "id": "ing-04",
+        "kind": "ingredients",
+        "query": "eggs flour milk sugar",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "German Pancake"
+      },
+      {
+        "id": "ing-05",
+        "kind": "ingredients",
+        "query": "spinach cheese pasta",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Spinish"
+      },
+      {
+        "id": "ing-06",
+        "kind": "ingredients",
+        "query": "black beans corn cumin",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Corn And Black Bean Salsa"
+      },
+      {
+        "id": "ing-07",
+        "kind": "ingredients",
+        "query": "salmon dill lemon",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Salmon Party Spread"
+      },
+      {
+        "id": "ing-08",
+        "kind": "ingredients",
+        "query": "mushroom cream thyme",
+        "returned": 5,
+        "precision_at_k": 0.2,
+        "recall_any": 1.0,
+        "reciprocal_rank": 0.2,
+        "distinct_titles": 1.0,
+        "top_title": "Soup Up Hamburger"
+      },
+      {
+        "id": "ing-09",
+        "kind": "ingredients",
+        "query": "pork apple sage",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Farmhouse Pork And Apple Pie"
+      },
+      {
+        "id": "ing-10",
+        "kind": "ingredients",
+        "query": "chickpeas tahini garlic",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Hummus"
+      },
+      {
+        "id": "ing-11",
+        "kind": "ingredients",
+        "query": "tofu soy ginger",
+        "returned": 5,
+        "precision_at_k": 0.6,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Eggrolls"
+      },
+      {
+        "id": "ing-12",
+        "kind": "ingredients",
+        "query": "lamb rosemary garlic",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Grilled Leg Of Lamb With Garlic And Rosemary"
+      },
+      {
+        "id": "ing-13",
+        "kind": "ingredients",
+        "query": "peanut butter chocolate oats",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Butterfinger Bars"
+      },
+      {
+        "id": "ing-14",
+        "kind": "ingredients",
+        "query": "cabbage bacon potato",
+        "returned": 5,
+        "precision_at_k": 0.2,
+        "recall_any": 1.0,
+        "reciprocal_rank": 0.2,
+        "distinct_titles": 1.0,
+        "top_title": "Cabbage On The Grill"
+      },
+      {
+        "id": "ing-15",
+        "kind": "ingredients",
+        "query": "zucchini parmesan basil",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Italian Zucchini Soup"
+      },
+      {
+        "id": "dish-01",
+        "kind": "dish",
+        "query": "banana bread",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Banana Bread"
+      },
+      {
+        "id": "dish-02",
+        "kind": "dish",
+        "query": "chicken cacciatore",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Chicken Cacciatore"
+      },
+      {
+        "id": "dish-03",
+        "kind": "dish",
+        "query": "beef stroganoff",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Easy Beef Stroganoff"
+      },
+      {
+        "id": "dish-04",
+        "kind": "dish",
+        "query": "clam chowder",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Clam Chowder"
+      },
+      {
+        "id": "dish-05",
+        "kind": "dish",
+        "query": "pumpkin pie",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Pumpkin Pie"
+      },
+      {
+        "id": "dish-06",
+        "kind": "dish",
+        "query": "guacamole",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Guacamole Dip"
+      },
+      {
+        "id": "dish-07",
+        "kind": "dish",
+        "query": "lasagna",
+        "returned": 5,
+        "precision_at_k": 0.6,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Apple Lasagna"
+      },
+      {
+        "id": "dish-08",
+        "kind": "dish",
+        "query": "shepherds pie",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Shepherds Pie(Serves 8.)  "
+      },
+      {
+        "id": "dish-09",
+        "kind": "dish",
+        "query": "carrot cake",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 0.5,
+        "distinct_titles": 1.0,
+        "top_title": "Mincemeat Cake"
+      },
+      {
+        "id": "dish-10",
+        "kind": "dish",
+        "query": "french onion soup",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "French Onion Soup"
+      },
+      {
+        "id": "dish-11",
+        "kind": "dish",
+        "query": "chocolate chip cookies",
+        "returned": 5,
+        "precision_at_k": 0.6,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Chocolate Chip Dessert"
+      },
+      {
+        "id": "dish-12",
+        "kind": "dish",
+        "query": "potato salad",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Potato Salad 1"
+      },
+      {
+        "id": "dish-13",
+        "kind": "dish",
+        "query": "meatloaf",
+        "returned": 0,
+        "precision_at_k": 0.0,
+        "recall_any": 0.0,
+        "reciprocal_rank": 0.0,
+        "distinct_titles": 0.0,
+        "top_title": ""
+      },
+      {
+        "id": "dish-14",
+        "kind": "dish",
+        "query": "cornbread",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Good And Moist Cornbread"
+      },
+      {
+        "id": "dish-15",
+        "kind": "dish",
+        "query": "apple crisp",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Jiffy Apple Crisp"
+      },
+      {
+        "id": "nl-01",
+        "kind": "ingredients",
+        "query": "what can I make with chicken and rice",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Forgotten Chicken And Rice"
+      },
+      {
+        "id": "nl-02",
+        "kind": "ingredients",
+        "query": "I want something with mushrooms and pasta",
+        "returned": 5,
+        "precision_at_k": 0.2,
+        "recall_any": 1.0,
+        "reciprocal_rank": 0.2,
+        "distinct_titles": 1.0,
+        "top_title": "Wild Rice With Mushrooms And Onions"
+      },
+      {
+        "id": "nl-03",
+        "kind": "ingredients",
+        "query": "a dessert with strawberries",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Amaretto Sabayou Dessert"
+      },
+      {
+        "id": "nl-04",
+        "kind": "ingredients",
+        "query": "soup with lentils and carrots",
+        "returned": 5,
+        "precision_at_k": 0.4,
+        "recall_any": 1.0,
+        "reciprocal_rank": 0.3333333333333333,
+        "distinct_titles": 1.0,
+        "top_title": "Red Lentil Soup With Garlic Croutons"
+      },
+      {
+        "id": "nl-05",
+        "kind": "dish",
+        "query": "grilled cheese sandwich",
+        "returned": 5,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Grilled Cheese Sandwich"
+      },
+      {
+        "id": "rare-01",
+        "kind": "ingredients",
+        "query": "saffron risotto",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 0.5,
+        "distinct_titles": 1.0,
+        "top_title": "Risotto"
+      },
+      {
+        "id": "rare-02",
+        "kind": "ingredients",
+        "query": "miso soup",
+        "returned": 5,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Seaweed Soup With Wheat Germ"
+      },
+      {
+        "id": "rare-03",
+        "kind": "ingredients",
+        "query": "kimchi",
+        "returned": 0,
+        "precision_at_k": 0.0,
+        "recall_any": 0.0,
+        "reciprocal_rank": 0.0,
+        "distinct_titles": 0.0,
+        "top_title": ""
+      },
+      {
+        "id": "rare-04",
+        "kind": "ingredients",
+        "query": "harissa",
+        "returned": 0,
+        "precision_at_k": 0.0,
+        "recall_any": 0.0,
+        "reciprocal_rank": 0.0,
+        "distinct_titles": 0.0,
+        "top_title": ""
+      },
+      {
+        "id": "rare-05",
+        "kind": "ingredients",
+        "query": "polenta",
+        "returned": 4,
+        "precision_at_k": 0.8,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
+        "distinct_titles": 1.0,
+        "top_title": "Polenta"
+      }
+    ],
+    "summary": {
+      "n": 40,
+      "precision_at_k": 0.655,
+      "answered": 0.925,
+      "mrr": 0.8233333333333334,
+      "distinct_titles": 0.925,
+      "empty_results": 3,
+      "latency_ms_median": 28.9789654998458,
+      "latency_ms_p95": 32.22361899679527
+    }
+  },
+  "pantry": {
+    "cases": [
+      {
+        "id": "pan-01",
+        "have": [
+          "chicken",
+          "onion",
+          "tomato",
+          "garlic"
+        ],
+        "returned": 5,
+        "complete": 0,
+        "best_match": 0.8,
+        "mean_missing": 1,
+        "exclusion_leaks": 0,
+        "latency_ms": 85.12269498896785
+      },
+      {
+        "id": "pan-02",
+        "have": [
+          "eggs",
+          "flour",
+          "milk",
+          "sugar",
+          "butter"
+        ],
+        "returned": 5,
+        "complete": 5,
+        "best_match": 1.0,
+        "mean_missing": 0,
+        "exclusion_leaks": 0,
+        "latency_ms": 84.4309840031201
+      },
+      {
+        "id": "pan-03",
+        "have": [
+          "rice",
+          "onion",
+          "garlic",
+          "oil"
+        ],
+        "returned": 5,
+        "complete": 2,
+        "best_match": 1.0,
+        "mean_missing": 0.6,
+        "exclusion_leaks": 0,
+        "latency_ms": 87.57736900588498
+      },
+      {
+        "id": "pan-04",
+        "have": [
+          "beef",
+          "potato",
+          "carrot",
+          "onion"
+        ],
+        "returned": 5,
+        "complete": 5,
+        "best_match": 1.0,
+        "mean_missing": 0,
+        "exclusion_leaks": 0,
+        "latency_ms": 85.14158800244331
+      },
+      {
+        "id": "pan-05",
+        "have": [
+          "pasta",
+          "tomato",
+          "garlic",
+          "basil"
+        ],
+        "returned": 5,
+        "complete": 3,
+        "best_match": 1.0,
+        "mean_missing": 0.4,
+        "exclusion_leaks": 0,
+        "latency_ms": 90.60440500616096
+      },
+      {
+        "id": "pan-06",
+        "have": [
+          "bread",
+          "cheese",
+          "butter"
+        ],
+        "returned": 5,
+        "complete": 5,
+        "best_match": 1.0,
+        "mean_missing": 0,
+        "exclusion_leaks": 0,
+        "latency_ms": 83.1039520126069
+      },
+      {
+        "id": "pan-07",
+        "have": [
+          "chickpeas",
+          "lemon",
+          "garlic",
+          "tahini"
+        ],
+        "returned": 5,
+        "complete": 4,
+        "best_match": 1.0,
+        "mean_missing": 0.2,
+        "exclusion_leaks": 0,
+        "latency_ms": 84.06163699692115
+      },
+      {
+        "id": "pan-08",
+        "have": [
+          "apples",
+          "flour",
+          "sugar",
+          "butter",
+          "cinnamon"
+        ],
+        "returned": 5,
+        "complete": 5,
+        "best_match": 1.0,
+        "mean_missing": 0,
+        "exclusion_leaks": 0,
+        "latency_ms": 87.54731199587695
+      }
+    ],
+    "summary": {
+      "n": 8,
+      "best_match": 0.975,
+      "complete_per_case": 3.625,
+      "mean_missing": 0.275,
+      "exclusion_leaks": 0,
+      "empty_results": 0,
+      "latency_ms_median": 85.13214149570558
+    }
+  }
+}

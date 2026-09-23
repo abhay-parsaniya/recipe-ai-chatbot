@@ -1,0 +1,26 @@
+# Core data handling
+pandas==2.2.3
+
+# Dataset loading (mbien/recipe_nlg)
+datasets==3.2.0
+
+# Vectorization + similarity search
+scikit-learn==1.6.1
+joblib==1.6.0
+
+# API layer
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+pydantic-settings==2.7.1
+
+# UI layer
+streamlit==1.41.1
+
+# LLM response generation (optional -- the app runs without a key)
+anthropic==1.7.0
+
+# Tests
+pytest==8.3.4
+# Required by fastapi.testclient; otherwise only a transitive dep of anthropic.
+httpx==0.28.1
