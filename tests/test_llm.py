@@ -253,7 +253,7 @@ def test_bot_falls_back_to_templates_when_the_llm_dies(engine):
     bot = RecipeChatbot(engine, engine.settings, ResponseGenerator(
         provider=FakeProvider(error=LLMError("down"))))
     reply = bot.respond("what can I make with chicken?", Conversation())
-    assert "Here are" in reply.text     # the template
+    assert "1. " in reply.text          # the template rendering
     assert not reply.used_llm
     assert reply.results
 
@@ -262,7 +262,7 @@ def test_bot_without_an_llm_behaves_exactly_as_before(engine):
     bot = RecipeChatbot(engine, engine.settings)
     reply = bot.respond("what can I make with chicken?", Conversation())
     assert not reply.used_llm
-    assert "Here are" in reply.text
+    assert "1. " in reply.text
 
 
 def test_llm_only_sees_retrieved_recipes(engine):

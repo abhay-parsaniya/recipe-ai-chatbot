@@ -8,6 +8,7 @@ from src.api.deps import get_bot
 from src.api.schemas import RecipeOut
 from src.chatbot import RecipeChatbot
 from src.search import SearchResult
+from src.utils.text import prettify_title
 
 router = APIRouter(tags=["recipes"])
 
@@ -30,7 +31,7 @@ def get_recipe(recipe_id: int = Path(ge=0),
     as_list = bot.engine.as_list
     result = SearchResult(
         recipe_id=int(row["recipe_id"]),
-        title=str(row["title"]),
+        title=prettify_title(row["title"]),
         score=1.0,               # an exact lookup, not a ranked match
         ingredients=as_list(row.get("ingredients")),
         directions=as_list(row.get("directions")),

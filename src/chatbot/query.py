@@ -30,7 +30,18 @@ FILLER_PHRASES = [
 ]
 
 # Single words with no discriminative value in a recipe corpus.
-STOPWORDS = {
+# Contractions appear here without apostrophes because normalize()
+# deletes them: "what's" arrives as "whats". Missing these let "whats"
+# through as a search term, so "what's a good side for steak" searched
+# for the literal word "whats".
+CONTRACTIONS = {
+    "whats", "wheres", "whens", "hows", "whos", "thats", "theres",
+    "heres", "its", "im", "ive", "id", "ill", "dont", "doesnt", "didnt",
+    "cant", "couldnt", "wont", "wouldnt", "shouldnt", "isnt", "arent",
+    "youre", "youve", "lets", "wanna", "gonna",
+}
+
+STOPWORDS = CONTRACTIONS | {
     "a", "an", "and", "any", "are", "as", "at", "be", "but", "by", "can",
     "could", "do", "does", "for", "from", "get", "give", "got", "has",
     "have", "hey", "hi", "hello", "how", "i", "if", "in", "is", "it",
@@ -39,6 +50,7 @@ STOPWORDS = {
     "that", "the", "them", "then", "there", "these", "they", "this", "to",
     "use", "using", "want", "was", "we", "what", "when", "where", "which",
     "will", "with", "without", "would", "you", "your",
+    "good", "best", "nice", "great", "easy", "quick", "simple",
 }
 
 # Words that flip the meaning of what follows. We detect them so the bot

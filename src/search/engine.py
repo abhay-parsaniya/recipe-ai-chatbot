@@ -56,7 +56,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from src.config.settings import Settings, get_settings
 from src.utils.logging import get_logger
-from src.utils.text import normalize
+from src.utils.text import normalize, prettify_title
 
 logger = get_logger(__name__)
 
@@ -355,7 +355,7 @@ class RecipeSearch:
         link = row.get("link")
         return SearchResult(
             recipe_id=int(row.get("recipe_id", index)),
-            title=str(row.get("title", "")),
+            title=prettify_title(row.get("title", "")),
             score=round(score, 4),
             similarity=round(similarity, 4),
             coverage=round(coverage, 4),

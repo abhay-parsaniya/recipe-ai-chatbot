@@ -1,5 +1,5 @@
 {
-  "corpus": 372232,
+  "corpus": 372213,
   "top_k": 5,
   "search": {
     "cases": [
@@ -111,7 +111,7 @@
         "recall_any": 1.0,
         "reciprocal_rank": 1.0,
         "distinct_titles": 1.0,
-        "top_title": "Hommus Tahini(Mid Eastern Recipe)  "
+        "top_title": "Hommus Tahini (Mid Eastern Recipe)"
       },
       {
         "id": "ing-11",
@@ -250,11 +250,11 @@
         "kind": "dish",
         "query": "shepherds pie",
         "returned": 5,
-        "precision_at_k": 0.0,
-        "recall_any": 0.0,
-        "reciprocal_rank": 0.0,
+        "precision_at_k": 1.0,
+        "recall_any": 1.0,
+        "reciprocal_rank": 1.0,
         "distinct_titles": 1.0,
-        "top_title": "Diet Lemon Pie"
+        "top_title": "Shepherd's Pie"
       },
       {
         "id": "dish-09",
@@ -320,7 +320,7 @@
         "recall_any": 1.0,
         "reciprocal_rank": 1.0,
         "distinct_titles": 1.0,
-        "top_title": "Chad'S Favorite Cornbread"
+        "top_title": "Chad's Favorite Cornbread"
       },
       {
         "id": "dish-15",
@@ -397,7 +397,7 @@
         "recall_any": 1.0,
         "reciprocal_rank": 1.0,
         "distinct_titles": 1.0,
-        "top_title": "Granny'S Easy Risotto"
+        "top_title": "Granny's Easy Risotto"
       },
       {
         "id": "rare-02",
@@ -446,13 +446,13 @@
     ],
     "summary": {
       "n": 40,
-      "precision_at_k": 0.87,
-      "answered": 0.925,
-      "mrr": 0.925,
+      "precision_at_k": 0.895,
+      "answered": 0.95,
+      "mrr": 0.95,
       "distinct_titles": 0.95,
       "empty_results": 2,
-      "latency_ms_median": 70.35971449658973,
-      "latency_ms_p95": 92.63163300056476
+      "latency_ms_median": 72.9054020048352,
+      "latency_ms_p95": 91.91442601149902
     }
   },
   "pantry": {
@@ -470,7 +470,7 @@
         "best_match": 1.0,
         "mean_missing": 0,
         "exclusion_leaks": 0,
-        "latency_ms": 140.8376219915226
+        "latency_ms": 157.1229749970371
       },
       {
         "id": "pan-02",
@@ -486,7 +486,7 @@
         "best_match": 1.0,
         "mean_missing": 0,
         "exclusion_leaks": 0,
-        "latency_ms": 146.95965699502267
+        "latency_ms": 157.2940870100865
       },
       {
         "id": "pan-03",
@@ -501,7 +501,7 @@
         "best_match": 1.0,
         "mean_missing": 0.2,
         "exclusion_leaks": 0,
-        "latency_ms": 140.69042600749526
+        "latency_ms": 154.21960900130216
       },
       {
         "id": "pan-04",
@@ -516,7 +516,7 @@
         "best_match": 1.0,
         "mean_missing": 0.2,
         "exclusion_leaks": 0,
-        "latency_ms": 134.89336999191437
+        "latency_ms": 146.83103800052777
       },
       {
         "id": "pan-05",
@@ -531,7 +531,7 @@
         "best_match": 1.0,
         "mean_missing": 0,
         "exclusion_leaks": 0,
-        "latency_ms": 135.39658900117502
+        "latency_ms": 151.32842998718843
       },
       {
         "id": "pan-06",
@@ -545,7 +545,7 @@
         "best_match": 1.0,
         "mean_missing": 0,
         "exclusion_leaks": 0,
-        "latency_ms": 140.07987899822183
+        "latency_ms": 151.27993799978867
       },
       {
         "id": "pan-07",
@@ -560,7 +560,7 @@
         "best_match": 1.0,
         "mean_missing": 0,
         "exclusion_leaks": 0,
-        "latency_ms": 132.5429360003909
+        "latency_ms": 142.98069800133817
       },
       {
         "id": "pan-08",
@@ -576,7 +576,7 @@
         "best_match": 1.0,
         "mean_missing": 0,
         "exclusion_leaks": 0,
-        "latency_ms": 146.28295399597846
+        "latency_ms": 156.75133100012317
       }
     ],
     "summary": {
@@ -586,7 +586,7 @@
       "mean_missing": 0.05,
       "exclusion_leaks": 0,
       "empty_results": 0,
-      "latency_ms_median": 140.38515250285855
+      "latency_ms_median": 152.7740194942453
     }
   }
 }

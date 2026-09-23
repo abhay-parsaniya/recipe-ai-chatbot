@@ -28,7 +28,7 @@ from dataclasses import asdict, dataclass, field
 from src.config.settings import Settings, get_settings
 from src.search.engine import RecipeSearch
 from src.utils.logging import get_logger
-from src.utils.text import normalize
+from src.utils.text import normalize, prettify_title
 
 logger = get_logger(__name__)
 
@@ -186,7 +186,7 @@ class PantryMatcher:
 
         return PantryMatch(
             recipe_id=result.recipe_id,
-            title=result.title,
+            title=prettify_title(result.title),
             match=round(len(matched_have) / countable, 4),
             have=matched_have,
             missing=missing,

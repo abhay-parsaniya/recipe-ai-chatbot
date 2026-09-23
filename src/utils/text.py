@@ -6,6 +6,12 @@ import unicodedata
 
 _WHITESPACE = re.compile(r"\s+")
 _NON_TEXT = re.compile(r"[^a-z0-9\s]")
+# Apostrophes are deleted, not replaced with a space, so "Shepherd's"
+# becomes "shepherds" and matches a user typing "shepherds pie".
+# Replacing it with a space produced the token pair "shepherd" + "s",
+# which no apostrophe-free query could ever hit -- 226 Shepherd's Pie
+# recipes were unreachable unless you typed the apostrophe yourself.
+_APOSTROPHE = re.compile(r"[\u2019'`]")
 
 
 def parse_list_field(value) -> list[str]:
@@ -39,6 +45,31 @@ def normalize(text: str) -> str:
     if not text:
         return ""
     text = unicodedata.normalize("NFKD", str(text))
+    text = _APOSTROPHE.sub("", text)
     text = text.encode("ascii", "ignore").decode("ascii").lower()
     text = _NON_TEXT.sub(" ", text)
     return _WHITESPACE.sub(" ", text).strip()
+
+
+# RecipeNLG title-cased every title mechanically, which mangles
+# possessives ("Ball'S") and glues brackets to the preceding word
+# ("Cups(Candy)"). These are display-only repairs -- matching, dedup and
+# the title bonus all run on normalize(), which strips punctuation
+# anyway, so prettifying cannot change any ranking.
+_POSSESSIVE = re.compile(r"(\w)'S\b")
+_TIGHT_BRACKET = re.compile(r"(\w)\(")
+_ACRONYMS = {"Bbq": "BBQ", "Tv": "TV", "Blt": "BLT", "Pb": "PB"}
+
+
+def prettify_title(title: str) -> str:
+    """Make a RecipeNLG title fit to show a human.
+
+    "Jewell Ball'S Chicken"        -> "Jewell Ball's Chicken"
+    "Quicky Chicken(Serves 4)  "   -> "Quicky Chicken (Serves 4)"
+    """
+    if not title:
+        return ""
+    text = _POSSESSIVE.sub(r"\1's", str(title))
+    text = _TIGHT_BRACKET.sub(r"\1 (", text)
+    text = _WHITESPACE.sub(" ", text).strip()
+    return " ".join(_ACRONYMS.get(word, word) for word in text.split())

@@ -422,3 +422,44 @@ def test_warm_populates_the_caches(engine):
     engine.warm()
     assert engine._title_cache is not None
     assert engine._feature_name_cache is not None
+
+
+# -- title display ------------------------------------------------------
+
+@pytest.mark.parametrize("raw,pretty", [
+    ("Jewell Ball'S Chicken", "Jewell Ball's Chicken"),
+    ("Reeses Cups(Candy)  ", "Reeses Cups (Candy)"),
+    ("Chicken Breasts Italiano(Microwave)  ",
+     "Chicken Breasts Italiano (Microwave)"),
+    ("Bbq Shrimp Quesadillas", "BBQ Shrimp Quesadillas"),
+    ("Sweet 'N Sour Chicken", "Sweet 'N Sour Chicken"),   # already fine
+    ("Low-Fat Spanish Rice", "Low-Fat Spanish Rice"),
+])
+def test_prettify_title(raw, pretty):
+    from src.utils.text import prettify_title
+
+    assert prettify_title(raw) == pretty
+
+
+def test_prettifying_cannot_change_ranking():
+    """Display-only: matching runs on normalize(), which strips the very
+    punctuation prettify_title repairs."""
+    from src.utils.text import normalize, prettify_title
+
+    for raw in ["Jewell Ball'S Chicken", "Reeses Cups(Candy)  ",
+                "Bbq Shrimp Quesadillas"]:
+        assert normalize(raw) == normalize(prettify_title(raw))
+
+
+def test_results_carry_prettified_titles(tmp_path):
+    raw = pd.DataFrame({
+        "title": ["Jewell Ball'S Chicken"],
+        "ingredients": ['["1 chicken", "1 can soup"]'],
+        "directions": ['["Bake."]'],
+        "NER": '["chicken", "soup"]',
+        "link": ["a.com"], "source": ["Gathered"],
+    })
+    settings = Settings(tfidf_min_df=1, tfidf_max_df=1.0,
+                        artifacts_dir=tmp_path, processed_data_dir=tmp_path)
+    engine = RecipeSearch(preprocess(raw), settings).fit()
+    assert engine.search("chicken", top_k=1)[0].title == "Jewell Ball's Chicken"

@@ -93,9 +93,42 @@ def test_search_respects_top_k(bot, chat):
 
 def test_response_is_conversational_not_a_data_dump(bot, chat):
     reply = bot.respond("I have chicken and rice", chat)
-    assert "Here are" in reply.text
-    assert "1. " in reply.text
-    assert "match" in reply.text
+    text = reply.text
+    assert "1. " in text                      # still selectable by number
+    assert "step" in text                     # says how involved each is
+    assert text.split("\n")[0].endswith(":")  # opens with a sentence
+    # The lead must not be the same regardless of how good the match is.
+    assert "Here are 5 recipes for" not in text
+
+
+def test_lead_line_reflects_match_quality(bot, chat):
+    """Opening with "here's what I found" when the best hit scores 12%
+    is a small lie told every session."""
+    from src.chatbot.responses import format_results
+
+    strong = format_results([_scored(0.60)], "chicken")
+    weak = format_results([_scored(0.05)], "chicken")
+    assert strong.split("\n")[0] != weak.split("\n")[0]
+    assert "closely" in weak
+
+
+def test_listing_shows_what_else_a_recipe_needs(bot, chat):
+    """Repeating the user's own ingredients back is not information."""
+    from src.chatbot.responses import extra_ingredients
+    from src.search import SearchResult
+
+    result = SearchResult(recipe_id=1, title="X", score=0.5,
+                          ner=["chicken", "rice", "saffron", "stock"])
+    extras = extra_ingredients(result, "chicken rice")
+    assert "saffron" in extras
+    assert "chicken" not in extras
+
+
+def _scored(score: float):
+    from src.search import SearchResult
+
+    return SearchResult(recipe_id=1, title="Test Recipe", score=score,
+                        ner=["butter"], directions=["Cook."])
 
 
 def test_negation_is_flagged_not_silently_ignored(bot, chat):
@@ -247,3 +280,25 @@ def test_reply_is_json_serializable(bot, chat):
     import json
     payload = bot.respond("chicken tomato onion", chat).to_dict()
     assert json.loads(json.dumps(payload))["intent"] == "search"
+
+
+def test_contractions_are_stripped_from_queries():
+    """Regression: normalize() deletes apostrophes, so "what's" arrives
+    as "whats". Without it in STOPWORDS the bot searched for the literal
+    word "whats"."""
+    assert build_query("what's a good side for steak") == "side steak"
+    assert "whats" not in build_query("what's good with salmon")
+    assert "dont" not in build_query("I don't have cheese")
+    # When stripping removes everything, build_query deliberately falls
+    # back to the raw message -- an empty query matches nothing at all,
+    # which is a worse answer than a noisy one.
+    assert build_query("what's in this") == "whats in this"
+
+
+def test_subjective_adjectives_are_not_searched():
+    """"good" and "easy" match recipes titled "Good Cake" and tell us
+    nothing about what the user wants."""
+    query = build_query("a good easy quick chicken dinner")
+    assert "chicken" in query
+    for word in ("good", "easy", "quick"):
+        assert word not in query.split()

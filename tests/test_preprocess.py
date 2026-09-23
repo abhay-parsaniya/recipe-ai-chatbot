@@ -108,3 +108,15 @@ def test_ingredient_order_does_not_defeat_dedup():
             == _ingredient_fingerprint(["2 eggs", "1 c. sugar"]))
     assert (_ingredient_fingerprint(["1 c. sugar"])
             != _ingredient_fingerprint(["1 cup sugar"]))
+
+
+def test_apostrophes_are_deleted_not_split():
+    """Regression: "Shepherd's" used to normalize to "shepherd s", so a
+    user typing "shepherds pie" matched none of the 226 Shepherd's Pie
+    recipes. The two spellings must land on the same token."""
+    from src.utils.text import normalize
+
+    assert normalize("Shepherd's Pie") == "shepherds pie"
+    assert normalize("shepherds pie") == "shepherds pie"
+    assert normalize("Jewell Ball'S Chicken") == "jewell balls chicken"
+    assert normalize("don't") == "dont"

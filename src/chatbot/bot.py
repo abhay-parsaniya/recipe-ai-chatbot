@@ -182,11 +182,16 @@ class RecipeChatbot:
         results = [self._to_result(m) for m in matches]
         conversation.set_results(results, ", ".join(parsed.have))
 
-        return BotReply(
-            text=responses.format_pantry(matches, parsed.have, parsed.exclude),
-            intent=Intent.PANTRY,
+        template = responses.format_pantry(matches, parsed.have,
+                                           parsed.exclude)
+        generated = self.generator.generate_search_reply(
+            user_query=parsed.text,
             results=results,
+            fallback_text=template,
+            history=self._history_for_llm(conversation),
         )
+        return BotReply(text=generated.text, intent=Intent.PANTRY,
+                        results=results, used_llm=generated.used_llm)
 
     @staticmethod
     def _to_result(match) -> SearchResult:
@@ -249,8 +254,14 @@ class RecipeChatbot:
                 text=f"I only showed {count} recipes -- pick 1 to {count}.",
                 intent=Intent.SELECT,
             )
-        return BotReply(text=responses.format_selection(selected),
-                        intent=Intent.SELECT, selected=selected)
+        generated = self.generator.generate_followup_reply(
+            user_query=parsed.text,
+            selected=selected,
+            fallback_text=responses.format_selection(selected),
+            history=self._history_for_llm(conversation),
+        )
+        return BotReply(text=generated.text, intent=Intent.SELECT,
+                        selected=selected, used_llm=generated.used_llm)
 
     def _detail(self, conversation: Conversation, intent: Intent,
                 formatter, message: str = "") -> BotReply:
