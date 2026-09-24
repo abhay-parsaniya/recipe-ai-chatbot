@@ -138,8 +138,20 @@ class GeminiProvider(LLMProvider):
 
     @staticmethod
     def _rejects_thinking(exc) -> bool:
+        """Any 400 while thinking_config was attached is worth one retry
+        without it.
+
+        Do NOT try to recognise the message: Gemini returns a bare
+        "Request contains an invalid argument." with no mention of the
+        offending field. An earlier version matched on the word
+        "thinking", never fired, and silently disabled the LLM for every
+        model that rejects the parameter.
+
+        A 400 caused by something else costs one wasted retry and then
+        surfaces normally, which is the cheaper failure of the two.
+        """
         code = getattr(exc, "code", None) or getattr(exc, "status", None)
-        return code == 400 and "thinking" in str(exc).lower()
+        return code == 400
 
     @staticmethod
     def _client_error(exc) -> LLMError:

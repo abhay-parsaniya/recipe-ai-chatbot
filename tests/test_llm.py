@@ -439,21 +439,22 @@ def test_thinking_budget_is_off_by_default():
     assert Settings().llm_thinking_budget == 0
 
 
-def test_gemini_retries_without_thinking_when_the_model_rejects_it():
-    """flash-lite returns 400 INVALID_ARGUMENT for thinking_config.
-    A model swap must not require a code change."""
+def test_gemini_retries_without_thinking_on_any_400():
+    """Regression: the retry used to require the word "thinking" in the
+    error. Gemini returns a bare "Request contains an invalid argument."
+    with no mention of the field, so the retry never fired and the LLM
+    silently fell back to templates for every model that rejects it."""
     from src.llm.providers.gemini_provider import GeminiProvider
 
-    class Rejects400:
-        code = 400
-        def __str__(self): return "Request contains an invalid argument: thinking_config"
+    class Err:
+        def __init__(self, code, msg): self.code, self.msg = code, msg
+        def __str__(self): return self.msg
 
-    class Other400:
-        code = 400
-        def __str__(self): return "Request payload too large"
-
-    assert GeminiProvider._rejects_thinking(Rejects400())
-    assert not GeminiProvider._rejects_thinking(Other400())
+    generic = Err(400, "400 INVALID_ARGUMENT. Request contains an "
+                       "invalid argument.")
+    assert GeminiProvider._rejects_thinking(generic)
+    assert not GeminiProvider._rejects_thinking(Err(429, "rate limited"))
+    assert not GeminiProvider._rejects_thinking(Err(404, "no such model"))
 
 
 def test_rate_limits_are_retryable_but_config_errors_are_not():

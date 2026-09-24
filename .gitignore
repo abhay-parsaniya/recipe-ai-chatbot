@@ -43,3 +43,7 @@ htmlcov/
 .vscode/
 .idea/
 .DS_Store
+
+# Demo recordings — large binaries, shared directly rather than committed
+*.mp4
+*.webm

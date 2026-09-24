@@ -18,30 +18,31 @@ SHOTS = [
        <div class="layer"><b>src/chatbot</b><span>guardrails · intents · history · response wording</span></div>
        <div class="arrow">↓</div>
        <div class="layer two"><b>src/api</b><span>FastAPI</span><b>app/</b><span>Streamlit</span></div>
-       <div class="note">src/llm sits alongside — optional, grounded, degrades to templates</div>
+       <div class="note">src/llm phrases the answer — it never chooses the recipes</div>
      </div>"""),
-    ("preprocess", "Weighting the searchable text",
-     "src/data/preprocess.py", 54, 76, None),
     ("engine", "Scoring: cosine × coverage × title bonus",
      "src/search/engine.py", 203, 222, None),
     ("guardrails", "Domain boundary",
-     "src/chatbot/guardrails.py", 152, 181, None),
-    ("evals", "Measured, not guessed",
-     "scripts/eval_search.py", 26, 44, None),
+     "src/chatbot/guardrails.py", 163, 181, None),
+    ("grounding", "The grounding contract",
+     "src/llm/prompts.py", 25, 40, None),
+    ("provider", "One provider module — swapped Anthropic for Gemini",
+     "src/llm/providers/gemini_provider.py", 116, 134, None),
+    ("verify", "Prompting is not proof, so the output is checked",
+     "src/llm/service.py", 136, 148, None),
 ]
 
 fmt = HtmlFormatter(style="github-dark", linenos=False, nowrap=True)
 parts = []
 for anchor, title, rel, a, b, custom in SHOTS:
     if custom:
-        body = custom
-        sub = "data → search → chat → interfaces"
+        body, sub = custom, "data → search → chat → interfaces"
     else:
-        lines = (ROOT / rel).read_text().splitlines()[a-1:b]
+        lines = (ROOT / rel).read_text().splitlines()[a - 1:b]
         code = highlight("\n".join(lines), PythonLexer(), fmt)
         numbered = "".join(
             f'<tr><td class="ln">{n}</td><td class="cd">{ln or "&nbsp;"}</td></tr>'
-            for n, ln in zip(range(a, b+1), code.split("\n")))
+            for n, ln in zip(range(a, b + 1), code.split("\n")))
         body = f'<table class="code">{numbered}</table>'
         sub = f"{rel}  ·  lines {a}–{b}"
     parts.append(f'<section id="{anchor}"><h1>{html.escape(title)}</h1>'
@@ -56,7 +57,7 @@ page = f"""<!doctype html><meta charset="utf-8"><title>Recipe Chatbot — code</
  section{{min-height:100vh;padding:58px 70px}}
  h1{{font-size:38px;margin:0 0 6px;color:#e6edf3}}
  .sub{{color:#8b949e;font-size:19px;margin-bottom:30px}}
- table.code{{border-collapse:collapse;font-size:19.5px;width:100%}}
+ table.code{{border-collapse:collapse;font-size:20px;width:100%}}
  td.ln{{color:#484f58;text-align:right;padding-right:22px;width:62px;
         user-select:none}}
  td.cd{{white-space:pre;padding:1px 0}}
