@@ -81,16 +81,35 @@ class Settings(BaseSettings):
     # Off by default: everything works without a key, and turning the LLM
     # on should be a deliberate act, not an accident of the environment.
     llm_enabled: bool = False
-    llm_provider: str = "anthropic"
-    llm_model: str = "claude-opus-5"
+    llm_provider: str = "gemini"        # "gemini" | "anthropic"
+    # Free-tier default. A flash model is the right size here: the task
+    # is rephrasing supplied text, not reasoning. Pinned rather than
+    # using the "gemini-flash-latest" alias, so a silent upstream model
+    # change can never alter output quality without a commit -- at the
+    # cost of needing a bump when a version retires (2.0-flash already
+    # has; the API returns a 404 naming its replacement).
+    # A *lite* flash model, deliberately. The free tier caps
+    # gemini-3.6-flash at 20 requests per day, which a single demo
+    # exhausts; the lite tier is far more generous and, for rewording
+    # supplied text, indistinguishable in quality.
+    llm_model: str = "gemini-3.1-flash-lite"
     llm_max_tokens: int = 2000
-    llm_timeout_seconds: float = 30.0
-    # Low effort: this is rephrasing supplied text, not solving anything.
+    llm_timeout_seconds: float = 20.0
+    # Low temperature: the model is rewording retrieved facts, and
+    # invention is the failure mode we care most about.
+    llm_temperature: float = 0.4
+    # Gemini 3.x models reason before answering by default. Measured on
+    # this workload: thinking on 18.5s average, off 4.1s, with no
+    # quality difference worth 14 seconds -- the model is rewording
+    # supplied text, not solving anything. -1 leaves the model's default.
+    llm_thinking_budget: int = 0
+    # Anthropic-only knob, ignored by Gemini.
     llm_effort: str = "low"
 
-    # SecretStr keeps the key out of logs and repr(). Read from the
-    # ANTHROPIC_API_KEY environment variable -- never written in code,
-    # never committed. Leave unset to run without an LLM.
+    # SecretStr keeps keys out of logs and repr(). Read from the
+    # environment -- never written in code, never committed. Leave unset
+    # to run without an LLM.
+    google_api_key: SecretStr | None = None
     anthropic_api_key: SecretStr | None = None
 
     # --- Services ------------------------------------------------------

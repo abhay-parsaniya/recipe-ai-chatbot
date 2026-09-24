@@ -17,7 +17,9 @@ pydantic-settings==2.7.1
 # UI layer
 streamlit==1.41.1
 
-# LLM response generation (optional -- the app runs without a key)
+# LLM response generation (optional -- the app runs without a key).
+# Either provider works; only the configured one is ever imported.
+google-genai==2.25.0
 anthropic==1.7.0
 
 # Tests

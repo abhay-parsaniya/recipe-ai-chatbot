@@ -41,7 +41,14 @@ def build_provider(settings: Settings | None = None) -> LLMProvider | None:
     if not settings.llm_enabled:
         return None
 
-    if settings.llm_provider == "anthropic":
+    provider = settings.llm_provider.strip().lower()
+
+    if provider == "gemini":
+        from src.llm.providers.gemini_provider import GeminiProvider
+
+        return GeminiProvider(settings)
+
+    if provider == "anthropic":
         from src.llm.providers.anthropic_provider import AnthropicProvider
 
         return AnthropicProvider(settings)
@@ -49,6 +56,13 @@ def build_provider(settings: Settings | None = None) -> LLMProvider | None:
     logger.warning("Unknown llm_provider %r; running without an LLM",
                    settings.llm_provider)
     return None
+
+
+# Distinct from None, which a caller may legitimately pass to mean
+# "explicitly no provider". Without this sentinel, provider=None fell
+# through to build_provider() and silently enabled the LLM -- so asking
+# for a template-only generator quietly gave you an LLM one.
+_UNSET = object()
 
 
 @dataclass
@@ -63,12 +77,13 @@ class GeneratedResponse:
 class ResponseGenerator:
     """Phrase a reply from recipes that retrieval already selected."""
 
-    def __init__(self, provider: LLMProvider | None = None,
+    def __init__(self, provider: LLMProvider | None = _UNSET,
                  settings: Settings | None = None):
+        """``provider`` omitted builds one from settings; passing None
+        explicitly disables generation and always returns templates."""
         self.settings = settings or get_settings()
-        self.provider = provider if provider is not None else build_provider(
-            self.settings
-        )
+        self.provider = (build_provider(self.settings)
+                         if provider is _UNSET else provider)
 
     @property
     def enabled(self) -> bool:

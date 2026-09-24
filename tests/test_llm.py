@@ -291,3 +291,196 @@ def test_followup_context_is_the_selected_recipe_only(engine):
     _, user_message = provider.calls[0]
     assert chat.selected.title in user_message
     assert user_message.count("### Recipe") == 1
+
+
+# -- Gemini provider ----------------------------------------------------
+
+def test_gemini_is_the_default_provider():
+    assert Settings().llm_provider == "gemini"
+    assert Settings().llm_model.startswith("gemini")
+
+
+def test_model_is_pinned_not_an_alias():
+    """A "-latest" alias can change model under you between runs, which
+    would move output quality with no commit to point at."""
+    assert not Settings().llm_model.endswith("latest")
+
+
+def test_registry_builds_a_gemini_provider():
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    provider = build_provider(Settings(llm_enabled=True, llm_provider="gemini"))
+    assert isinstance(provider, GeminiProvider)
+
+
+def test_registry_still_builds_anthropic():
+    from src.llm.providers.anthropic_provider import AnthropicProvider
+
+    provider = build_provider(Settings(llm_enabled=True,
+                                       llm_provider="anthropic"))
+    assert isinstance(provider, AnthropicProvider)
+
+
+def test_provider_name_is_case_and_space_insensitive():
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    assert isinstance(build_provider(Settings(llm_enabled=True,
+                                              llm_provider=" Gemini ")),
+                      GeminiProvider)
+
+
+def test_gemini_is_unavailable_without_a_key():
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    provider = GeminiProvider(Settings(llm_enabled=True, google_api_key=None))
+    assert not provider.is_available
+    with pytest.raises(LLMError, match="GOOGLE_API_KEY"):
+        provider.generate("s", "u")
+
+
+def test_gemini_key_is_not_exposed_by_repr():
+    settings = Settings(google_api_key="AIza-not-a-real-key-value")
+    assert "AIza-not-a-real-key-value" not in repr(settings)
+    assert "AIza-not-a-real-key-value" not in str(settings)
+
+
+class _Part:
+    def __init__(self, text): self.text = text
+
+
+class _Candidate:
+    def __init__(self, texts=(), finish_reason=None):
+        self.content = type("C", (), {"parts": [_Part(t) for t in texts]})()
+        self.finish_reason = finish_reason
+
+
+class _Response:
+    def __init__(self, candidates, usage=None):
+        self.candidates = candidates
+        self.usage_metadata = usage
+
+
+def test_gemini_extracts_text_across_parts():
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    response = _Response([_Candidate(["Here are ", "two recipes."])])
+    assert GeminiProvider._extract_text(response) == "Here are two recipes."
+
+
+def test_gemini_reports_why_a_blocked_reply_was_empty():
+    """A safety block returns candidates with no parts. The reason must
+    reach the log, not vanish into a generic failure."""
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    response = _Response([_Candidate([], finish_reason="SAFETY")])
+    assert GeminiProvider._extract_text(response) == ""
+    assert "SAFETY" in GeminiProvider._finish_reason(response)
+
+
+def test_gemini_handles_a_response_with_no_candidates():
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    assert GeminiProvider._extract_text(_Response([])) == ""
+    assert "no candidates" in GeminiProvider._finish_reason(_Response([]))
+
+
+def test_only_the_configured_provider_is_imported():
+    """The whole point of the abstraction: nothing above
+    src/llm/providers/ may name a vendor SDK."""
+    import pathlib
+
+    root = pathlib.Path(__file__).resolve().parents[1] / "src"
+    for path in root.rglob("*.py"):
+        if "providers" in path.parts:
+            continue
+        text = path.read_text()
+        for vendor in ("import anthropic", "from anthropic",
+                       "from google import genai", "import google.genai"):
+            assert vendor not in text, f"{vendor} leaked into {path}"
+
+
+def test_explicit_none_provider_disables_generation():
+    """Regression: provider=None fell through to build_provider(), so a
+    caller asking for template-only output silently got an LLM."""
+    settings = Settings(llm_enabled=True, llm_provider="gemini",
+                        google_api_key="dummy")
+    assert ResponseGenerator(settings=settings).provider is not None
+    assert ResponseGenerator(provider=None, settings=settings).provider is None
+    assert not ResponseGenerator(provider=None, settings=settings).enabled
+
+
+def test_disabled_generator_returns_the_template_untouched():
+    settings = Settings(llm_enabled=True, google_api_key="dummy")
+    out = ResponseGenerator(provider=None, settings=settings) \
+        .generate_search_reply("chicken", [make_result()], "TEMPLATE")
+    assert out.text == "TEMPLATE"
+    assert not out.used_llm
+
+
+def test_suite_is_isolated_from_the_local_dotenv():
+    """Guards the isolation itself: if conftest stops working, this
+    fails loudly instead of tests silently calling a real API."""
+    import os
+    from pathlib import Path
+
+    settings = Settings()
+    assert settings.llm_enabled is False
+    assert settings.google_api_key is None
+    assert settings.anthropic_api_key is None
+    # ...even though a populated .env exists on this machine.
+    dotenv = Path(__file__).resolve().parents[1] / ".env"
+    if dotenv.exists() and "LLM_ENABLED=true" in dotenv.read_text():
+        assert not os.getenv("LLM_ENABLED")
+
+
+def test_thinking_budget_is_off_by_default():
+    """Measured on this workload: thinking on 18.5s avg, off 4.1s, with
+    no quality gain. The model rewords supplied text; it isn't solving."""
+    assert Settings().llm_thinking_budget == 0
+
+
+def test_gemini_retries_without_thinking_when_the_model_rejects_it():
+    """flash-lite returns 400 INVALID_ARGUMENT for thinking_config.
+    A model swap must not require a code change."""
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    class Rejects400:
+        code = 400
+        def __str__(self): return "Request contains an invalid argument: thinking_config"
+
+    class Other400:
+        code = 400
+        def __str__(self): return "Request payload too large"
+
+    assert GeminiProvider._rejects_thinking(Rejects400())
+    assert not GeminiProvider._rejects_thinking(Other400())
+
+
+def test_rate_limits_are_retryable_but_config_errors_are_not():
+    """On the free tier a 429 is routine, not an emergency."""
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    class Err:
+        def __init__(self, code): self.code = code
+        def __str__(self): return f"error {self.code}"
+
+    assert GeminiProvider._client_error(Err(429)).retryable
+    assert not GeminiProvider._client_error(Err(400)).retryable
+    assert not GeminiProvider._client_error(Err(403)).retryable
+
+
+def test_default_model_is_a_lite_tier_model():
+    """The free tier caps gemini-3.6-flash at 20 requests per day, which
+    one demo session exhausts. Lite models have far more headroom."""
+    assert "lite" in Settings().llm_model
+
+
+def test_thinking_rejection_is_remembered_not_retried_every_turn():
+    """The retry costs a second request. Against a per-day quota,
+    repeating it on every turn would halve the usable budget."""
+    from src.llm.providers.gemini_provider import GeminiProvider
+
+    provider = GeminiProvider(Settings(google_api_key="dummy"))
+    assert provider._thinking_supported is True
+    provider._thinking_supported = False          # as the retry sets it
+    assert provider._thinking_supported is False

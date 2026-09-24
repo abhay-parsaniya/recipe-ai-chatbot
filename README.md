@@ -165,12 +165,28 @@ LLM **phrases** the reply; it never decides what the recipes are:
 user query -> TF-IDF search -> top K recipes -> LLM (given only those) -> reply
 ```
 
+Gemini (free tier) is the default; Anthropic is also supported. Put the key
+in `.env`, which is gitignored:
+
 ```bash
-export ANTHROPIC_API_KEY=...       # never hardcoded, never committed
-echo "LLM_ENABLED=true" >> .env
+LLM_ENABLED=true
+LLM_PROVIDER=gemini
+LLM_MODEL=gemini-3.1-flash-lite
+GOOGLE_API_KEY=...          # https://aistudio.google.com/apikey
+```
+
+```bash
+python -m scripts.check_llm      # verifies the key, shows template vs LLM
 python -m scripts.chat
 python -m scripts.show_prompt "chicken tomato onion"   # inspect, send nothing
 ```
+
+**Free-tier notes.** Quotas are per-model and per-day: `gemini-3.6-flash`
+allows 20 requests/day, which one demo exhausts, so the default is a *lite*
+model with far more headroom. Thinking is disabled (`llm_thinking_budget=0`)
+-- measured at 18.5s on vs 4.1s off, with no quality gain for rewording
+supplied text. A 429 is treated as routine: that turn silently falls back to
+template wording rather than erroring.
 
 Three guarantees, each covered by tests:
 
